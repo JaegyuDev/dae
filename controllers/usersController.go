@@ -1,10 +1,12 @@
 package controllers
 
 import (
-	"github.com/3AM-Developer/dae/database"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/3AM-Developer/dae/database"
 
 	"github.com/golang-jwt/jwt/v4"
 
@@ -29,17 +31,10 @@ func Signup(c *gin.Context) {
 
 		return
 	}
-	// hash password
-	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to hash password",
-		})
 
-		return
-	}
 	// create user
-	user := models.User{Email: body.Email, Password: string(hash)}
+	user := models.User{Email: body.Email, Password: body.Password}
+	fmt.Printf("new user %#v", user)
 	result := database.DB.Create(&user)
 
 	if result.Error != nil {
@@ -55,6 +50,7 @@ func Signup(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
+
 	// Get the email:pass off req body
 	var body struct {
 		Email    string
