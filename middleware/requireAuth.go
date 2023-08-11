@@ -2,11 +2,11 @@ package middleware
 
 import (
 	"fmt"
+	"github.com/3AM-Developer/dae/database"
 	"net/http"
 	"os"
 	"time"
 
-	"github.com/3AM-Developer/dae/initializers"
 	"github.com/3AM-Developer/dae/models"
 
 	"github.com/gin-gonic/gin"
@@ -39,7 +39,7 @@ func RequireAuth(c *gin.Context) {
 
 		// Find the user with token sub
 		var user models.User
-		initializers.DB.First(&user, claims["sub"])
+		database.DB.First(&user, claims["sub"])
 		if user.ID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}

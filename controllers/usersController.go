@@ -1,13 +1,12 @@
 package controllers
 
 import (
+	"github.com/3AM-Developer/dae/database"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-
-	"github.com/3AM-Developer/dae/initializers"
 
 	"github.com/3AM-Developer/dae/models"
 
@@ -41,7 +40,7 @@ func Signup(c *gin.Context) {
 	}
 	// create user
 	user := models.User{Email: body.Email, Password: string(hash)}
-	result := initializers.DB.Create(&user)
+	result := database.DB.Create(&user)
 
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -72,7 +71,7 @@ func Login(c *gin.Context) {
 
 	// Look up req user
 	var user models.User
-	initializers.DB.First(&user, "email = ?", body.Email)
+	database.DB.First(&user, "email = ?", body.Email)
 
 	if user.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{

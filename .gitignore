@@ -19,3 +19,9 @@
 
 # Go workspace file
 go.work
+
+# env files smh
+.env
+
+# notes of stuff to work on
+_.TODO
